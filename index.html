@@ -171,71 +171,200 @@
     </footer>
 
     <script src="main.js"></script>
-<!-- ESTILOS DEL CHAT -->
+
+<!-- WIDGET DE CHAT -->
 <style>
-  #chatbot-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: sans-serif; }
-  #chatbot-btn { background: #007bff; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 24px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-  #chatbot-window { display: none; width: 300px; height: 400px; background: white; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); flex-direction: column; overflow: hidden; margin-bottom: 10px; border: 1px solid #ccc; }
-  #chat-messages { flex: 1; padding: 10px; overflow-y: auto; background: #f9f9f9; display: flex; flex-direction: column; gap: 8px; }
-  .msg { padding: 8px 12px; border-radius: 15px; max-width: 80%; font-size: 14px; }
-  .msg-user { background: #007bff; color: white; align-self: flex-end; }
-  .msg-bot { background: #e0e0e0; color: black; align-self: flex-start; }
-  #chat-input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #ddd; }
-  #chat-input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 5px; outline: none; }
-  #chat-send { background: #28a745; color: white; border: none; padding: 8px 12px; margin-left: 5px; border-radius: 5px; cursor: pointer; }
+  #chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  #chatbot-btn {
+    background-color: #6c5ce7;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(108, 92, 231, 0.4);
+  }
+
+  #chatbot-btn:hover {
+    background-color: #5a4bd1;
+  }
+
+  #chatbot-window {
+    display: none;
+    width: 320px;
+    height: 420px;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  #chat-header {
+    background-color: #6c5ce7;
+    color: #fff;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  #chat-header i {
+    font-size: 1rem;
+  }
+
+  #chat-messages {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    background-color: #111;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .msg {
+    padding: 8px 14px;
+    border-radius: 12px;
+    max-width: 82%;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+
+  .msg-user {
+    background-color: #6c5ce7;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .msg-bot {
+    background-color: #222;
+    color: #ddd;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+
+  .msg-typing {
+    background-color: #222;
+    color: #888;
+    align-self: flex-start;
+    font-style: italic;
+    border-bottom-left-radius: 4px;
+  }
+
+  #chat-input-area {
+    display: flex;
+    padding: 10px;
+    background-color: #1a1a1a;
+    border-top: 1px solid #333;
+    gap: 8px;
+  }
+
+  #chat-input {
+    flex: 1;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    background-color: #111;
+    color: #ddd;
+    border: 1px solid #333;
+    border-radius: 8px;
+    outline: none;
+  }
+
+  #chat-input:focus {
+    border-color: #6c5ce7;
+  }
+
+  #chat-send {
+    background-color: #6c5ce7;
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  #chat-send:hover {
+    background-color: #5a4bd1;
+  }
 </style>
 
-<!-- HTML DEL CHAT -->
 <div id="chatbot-container">
   <div id="chatbot-window">
+    <div id="chat-header">
+      <i class="fas fa-robot"></i> Asistente del Portafolio
+    </div>
     <div id="chat-messages">
-      <div class="msg msg-bot">¡Hola! Soy el asistente del portafolio. ¿En qué puedo ayudarte?</div>
+      <div class="msg msg-bot">¡Hola! Soy el asistente de Miranda. 👋 Pregúntame sobre sus proyectos, habilidades, contacto o lo que necesites.</div>
     </div>
     <div id="chat-input-area">
       <input type="text" id="chat-input" placeholder="Escribe un mensaje...">
-      <button id="chat-send">Enviar</button>
+      <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
-  <button id="chatbot-btn">💬</button>
+  <button id="chatbot-btn"><i class="fas fa-comment-dots"></i></button>
 </div>
 
-<!-- JAVASCRIPT DEL CHAT -->
 <script>
+  // ── URL del bot en Render (cambia esto por tu URL real de Render) ──
+  const BOT_URL = 'https://bot-portafolio-01r3.onrender.com';
+
   const btnChat = document.getElementById('chatbot-btn');
   const windowChat = document.getElementById('chatbot-window');
   const inputChat = document.getElementById('chat-input');
   const btnSend = document.getElementById('chat-send');
   const messagesArea = document.getElementById('chat-messages');
 
-  // Abrir/cerrar chat
   btnChat.addEventListener('click', () => {
     windowChat.style.display = windowChat.style.display === 'flex' ? 'none' : 'flex';
+    if (windowChat.style.display === 'flex') inputChat.focus();
   });
 
-  // Función para enviar mensaje
   async function enviarMensaje() {
     const texto = inputChat.value.trim();
     if (!texto) return;
 
-    // 1. Mostrar mensaje del usuario
     messagesArea.innerHTML += `<div class="msg msg-user">${texto}</div>`;
     inputChat.value = '';
     messagesArea.scrollTop = messagesArea.scrollHeight;
 
+    // Indicador de escritura
+    const typing = document.createElement('div');
+    typing.className = 'msg msg-typing';
+    typing.textContent = 'Escribiendo...';
+    messagesArea.appendChild(typing);
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+
     try {
-      // 2. Enviar mensaje a nuestro bot local
-      const respuesta = await fetch('https://bot-portafolio-01r3.onrender.com/api/chat', {
+      const respuesta = await fetch(BOT_URL + '/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mensaje: texto })
       });
-      
-      const datos = await respuesta.json();
 
-      // 3. Mostrar respuesta del bot
+      const datos = await respuesta.json();
+      typing.remove();
       messagesArea.innerHTML += `<div class="msg msg-bot">${datos.respuesta}</div>`;
     } catch (error) {
-      messagesArea.innerHTML += `<div class="msg msg-bot" style="background: #ffcccc;">Error: Asegúrate de que el bot (index.js) esté encendido.</div>`;
+      typing.remove();
+      messagesArea.innerHTML += `<div class="msg msg-bot">⚠️ No pude conectar con el servidor. Intenta de nuevo más tarde.</div>`;
     }
     messagesArea.scrollTop = messagesArea.scrollHeight;
   }
